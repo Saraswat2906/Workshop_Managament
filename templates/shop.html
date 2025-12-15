@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop - Shop</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding-bottom: 100px; /* Space for the cart bar */
+        }
+        /* Header and Profile Icon */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header h1 {
+            margin: 0;
+            color: #333;
+        }
+        .profile-icon {
+            display: block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            line-height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .profile-icon:hover { background-color: #0056b3; }
+        
+        /* Product Grid */
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+        .product {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: box-shadow 0.2s;
+        }
+        .product:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        .product h3 { margin: 0 0 0.5rem 0; color: #333; }
+        .product-price { font-size: 1.1rem; font-weight: 600; color: #007bff; margin-bottom: 0.5rem; }
+        .product-seller { font-size: 0.9rem; color: #555; margin-bottom: 1rem; }
+        
+        /* Quantity Button */
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            border: 1px solid #007bff;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+        .quantity-btn {
+            background-color: #fff;
+            border: none;
+            color: #007bff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+        .quantity-btn:hover { background-color: #f0f8ff; }
+        .quantity-display {
+            width: 40px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+        /* Add Button (replaces controls) */
+        .add-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 0;
+            width: 120px;
+            height: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .add-btn:hover { background-color: #0056b3; }
+        .add-btn-plus { font-size: 1.5rem; margin-left: -5px; margin-right: 5px; }
+
+        /* Notify Button */
+        .notify-btn {
+            background-color: #f0f0f0;
+            color: #555;
+            border: 1px solid #ddd;
+            width: 120px;
+            height: 40px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        /* Cart Bar */
+        #cart-bar {
+            position: fixed;
+            bottom: -150px; /* Start hidden */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background-color: #222;
+            color: white;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: bottom 0.3s ease-in-out;
+            z-index: 2000;
+        }
+        #cart-bar.visible {
+            bottom: 20px;
+        }
+        #cart-info { flex-grow: 1; }
+        #cart-info #cart-item-count { font-weight: 600; }
+        #cart-info #cart-seller { font-size: 0.9rem; color: #ccc; }
+        #checkout-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #checkout-btn:hover { background-color: #0056b3; }
+        
+        /* Message Modal */
+        #modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .modal-content p { font-size: 1.1rem; margin: 0 0 1.5rem 0; }
+        .modal-btn {
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0 0.5rem;
+        }
+        #modal-confirm { background-color: #d9534f; color: white; }
+        #modal-cancel { background-color: #f0f0f0; color: #333; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>Workshop</h1>
+        <!-- New Profile Icon -->
+        <a href="/profile" class="profile-icon" id="profile-link">?</a>
+    </header>
+
+    <div id="product-list">
+        <!-- Products will be loaded here by JavaScript -->
+    </div>
+
+    <!-- New Cart Bar -->
+    <div id="cart-bar">
+        <div id="cart-info">
+            <div id="cart-item-count">0 Items | $0.00</div>
+            <div id="cart-seller">from ...</div>
+        </div>
+        <button id="checkout-btn" onclick="proceedToCheckout()">Proceed to Purchase</button>
+    </div>
+    
+    <!-- Modal for seller conflict, notify, etc. -->
+    <div id="modal">
+        <div class="modal-content">
+            <p id="modal-message">Message goes here</p>
+            <div id="modal-buttons">
+                <button id="modal-confirm" class="modal-btn">Yes</button>
+                <button id="modal-cancel" class="modal-btn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to your external JS file -->
+    <script src="{{ url_for('static', filename='js/shop.js') }}"></script>
+</body>
+</html>

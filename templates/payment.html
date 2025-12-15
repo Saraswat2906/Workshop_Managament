@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: grid; place-items: center; min-height: 90vh; background-color: #f4f7f6; }
+        #payment-form { width: 340px; padding: 2.5rem; border: 1px solid #ddd; border-radius: 12px; background-color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        h2 { text-align: center; margin-top: 0; }
+        p { font-size: 1.1rem; color: #333; }
+        p strong { color: #007bff; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 1.5rem 0; }
+        input { display: block; width: 90%; margin: 1rem auto; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
+        .button-group { display: flex; justify-content: space-between; gap: 1rem; }
+        .btn {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #btn-pay { background-color: #007bff; color: white; }
+        #btn-pay:hover { background-color: #0056b3; }
+        #btn-cancel { background-color: #f44336; color: white; }
+        #btn-cancel:hover { background-color: #d32f2f; }
+        #payment-message { text-align: center; margin-top: 1rem; color: #d9534f; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div id="payment-form">
+        <h2>Complete Payment</h2>
+        <p>Order ID: <strong id="order_id"></strong></p>
+        <p>Total: $<strong id="amount"></strong></p>
+        <hr>
+        <label for="upi_id" style="display:block; text-align:center; margin-bottom: 0.5rem; color: #555;">Enter UPI ID (for demo):</label>
+        <input type="text" id="upi_id" placeholder="your-name@okbank">
+        <div class="button-group">
+            <button id="btn-pay" class="btn" onclick="pay()">Pay Now</button>
+            <button id="btn-cancel" class="btn" onclick="cancelOrder()">Cancel Order</button>
+        </div>
+        <p id="payment-message"></p>
+    </div>
+
+    <!-- Link to your external JS file -->
+    <script src="{{ url_for('static', filename='js/payment.js') }}"></script>
+</body>
+</html>
+

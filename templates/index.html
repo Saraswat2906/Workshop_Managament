@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop Login</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; display: grid; place-items: center; min-height: 90vh; background-color: #f4f7f6; }
+        div.card { background: #fff; padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
+        h2 { margin-top: 0; color: #333; }
+        input { display: block; width: 300px; box-sizing: border-box; margin-bottom: 1rem; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+        button { width: 100%; padding: 12px; background-color: #007aff; color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background-color 0.2s; }
+        button:hover { background-color: #0056b3; }
+        p#message { font-size: 0.9rem; color: #d9534f; }
+    </style>
+</head>
+<body>
+    <div class="card" id="login-form">
+        <h2>Login or Register</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="text" id="phone" placeholder="Phone Number" required>
+        <button onclick="login()">Login / Register</button>
+        <p id="message"></p>
+    </div>
+
+    <!-- Link to your external JS file -->
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .header a {
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: #333;
+            margin-right: 1rem;
+        }
+        .header h1 { margin: 0; color: #333; }
+        
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        /* Tabs */
+        .tab-nav {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab-btn {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #555;
+            position: relative;
+            bottom: -2px;
+        }
+        .tab-btn.active {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+        }
+        
+        .tab-content {
+            display: none; /* Hidden by default */
+            padding-top: 1.5rem;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Order Card */
+        .order-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #eee;
+        }
+        .order-header-info {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .order-header-info strong { color: #333; }
+        .order-status {
+            font-weight: 600;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.9rem;
+            text-transform: capitalize;
+        }
+        /* Status Colors */
+        .status-processing { background-color: #007bff; }
+        .status-shipped, .status-delivered { background-color: #28a745; }
+        .status-cancelled, .status-returned { background-color: #dc3545; }
+        .status-pending { background-color: #ffc107; color: #333; }
+
+        .order-body { padding: 1.5rem; }
+        .order-shipping-info {
+            font-size: 0.95rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .order-item-name { color: #555; }
+        .order-item-name span { font-weight: 600; color: #333; }
+        .order-item-price { font-weight: 500; }
+
+        .order-total {
+            border-top: 1px dashed #ccc;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            text-align: right;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .order-footer {
+            padding: 1rem 1.5rem;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+        .btn {
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-left: 0.5rem;
+        }
+        .btn-danger { background-color: #f44336; color: white; }
+        .btn-danger:hover { background-color: #d32f2f; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-secondary:hover { background-color: #5a6268; }
+        
+        #loading, .empty-state {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #777;
+            padding: 3rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="/shop">&#8592;</a> <!-- Back arrow -->
+        <h1>My Orders</h1>
+    </header>
+
+    <div class="container">
+        <nav class="tab-nav">
+            <button class="tab-btn active" onclick="openTab('current')">Current Orders</button>
+            <button class="tab-btn" onclick="openTab('previous')">Previous Orders</button>
+            <button class="tab-btn" onclick="openTab('cancelled')">Cancelled & Returned</button>
+        </nav>
+        
+        <div id="loading">Loading orders...</div>
+
+        <!-- Current Orders Tab -->
+        <div id="current" class="tab-content active">
+            <div id="current-orders-list"></div>
+            <div id="current-empty" class="empty-state" style="display: none;">You have no current orders.</div>
+        </div>
+
+        <!-- Previous Orders Tab -->
+        <div id="previous" class="tab-content">
+            <div id="previous-orders-list"></div>
+            <div id="previous-empty" class="empty-state" style="display: none;">You have no previous orders.</div>
+        </div>
+
+        <!-- Cancelled Orders Tab -->
+        <div id="cancelled" class="tab-content">
+            <div id="cancelled-orders-list"></div>
+            <div id="cancelled-empty" class="empty-state" style="display: none;">You have no cancelled or returned orders.</div>
+        </div>
+    </div>
+    
+    <!-- Link to your external JS file -->
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html>
+
